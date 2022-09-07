@@ -1,17 +1,26 @@
 import React, {useState, useEffect, useRef} from 'react';
+import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import { UserConsumer } from '../utils/UserContext';
 
+
+//.......................main function...................//
 export default function Login() {
+    //navigation function 
+    let navigate= useNavigate();
+
+    //reference
     const emailRef= useRef('');
     const passwordRef= useRef('');
 
-    const [isLoaded, setIsLoaded]= useState(false);
+    //states
     const [isLoading, setIsLoading]= useState(false);
-    const [username, setUsername]= useState('');
+    const [name, setName]= useState('');
     const [token, setToken]= useState('');
     const [imageString, setImageString]= useState('');
 
+    //handle login click button
     const handleLoginClick= async()=> {
         console.log('handleLoginClick on progress');
         setIsLoading(true);
@@ -25,11 +34,9 @@ export default function Login() {
             );
             console.log('process halted');
             console.log(response.data);
-            setUsername(response.data.user.name);
-            setToken(response.data.token);
-            setImageString(response.data.user.user_attribute_1);
-            setIsLoaded(true);
+            console.log('the value transfered succesfully');
             setIsLoading(false);
+            navigate("/home", { state: {name: response.data.user.name, token: response.data.token, imageString:response.data.user.user_attribute_1 }});
 
         } catch(e) {
             setIsLoading(false);
@@ -45,16 +52,19 @@ export default function Login() {
         setIsLoading(false);
     }
 
+    //handle circular button click
     const cbHandleClick= () => {
-        alert('name= ' + username +', token= '+ token);
+        alert('name= ' + '' +', token= '+ '');
     }
 
+    //handle register click
     const handleRegisterClick= ()=> {
         alert('clicked register');
     }
 
+    //useEffect hook
     useEffect(() => {
-        
+        //trigger the rendering
     }, [isLoading]);
     
 
@@ -78,6 +88,8 @@ export default function Login() {
     );
 }
 
+
+//...............styling....................//
 const Container= styled.div`
     display: flex;
     flex-direction: column;
