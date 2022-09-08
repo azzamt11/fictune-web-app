@@ -2,16 +2,14 @@ import React from 'react'
 import {useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 
-function Home() {
+function Home({value}) {
     const {state}= useLocation();
+    console.log(value);
 
     return (
         <Container>
-            <Span>Token= {state.token}</Span>
-            <Span>name= {state.name}</Span>
-            <Box>
-                imageString= {state.imageString}
-            </Box>
+            <Span>Token= {state? state.token : value.token}</Span>
+            <Span>name= {state? state.name : value.name}</Span>
         </Container>
     )
 }

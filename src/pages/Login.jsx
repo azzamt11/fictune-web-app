@@ -2,11 +2,11 @@ import React, {useState, useEffect, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
-import { UserConsumer } from '../utils/UserContext';
+import Cookies from 'js-cookie';
 
 
 //.......................main function...................//
-export default function Login() {
+const Login= () => {
     //navigation function 
     let navigate= useNavigate();
 
@@ -16,9 +16,6 @@ export default function Login() {
 
     //states
     const [isLoading, setIsLoading]= useState(false);
-    const [name, setName]= useState('');
-    const [token, setToken]= useState('');
-    const [imageString, setImageString]= useState('');
 
     //handle login click button
     const handleLoginClick= async()=> {
@@ -36,7 +33,17 @@ export default function Login() {
             console.log(response.data);
             console.log('the value transfered succesfully');
             setIsLoading(false);
-            navigate("/home", { state: {name: response.data.user.name, token: response.data.token, imageString:response.data.user.user_attribute_1 }});
+            Cookies.set('name', response.data.user.name);
+            Cookies.set('token', response.data.token);
+            Cookies.set('imageString', response.data.user.user_attribute_1);
+            if (window.confirm('Situs ini menggunakan Cookies untuk memudahkan pengguna, apakah anda tetap ingin melanjutkan?')) {
+                navigate("/home", { state: {name: response.data.user.name, token: response.data.token, imageString:response.data.user.user_attribute_1 }});
+              } else {
+                Cookies.remove('name');
+                Cookies.remove('token');
+                document.getElementById('emailInput').value= '';
+                document.getElementById('passwordInput').value= '';
+              }
 
         } catch(e) {
             setIsLoading(false);
@@ -64,7 +71,6 @@ export default function Login() {
 
     //useEffect hook
     useEffect(() => {
-        //trigger the rendering
     }, [isLoading]);
     
 
@@ -87,6 +93,8 @@ export default function Login() {
     </Container>
     );
 }
+
+export default Login;
 
 
 //...............styling....................//

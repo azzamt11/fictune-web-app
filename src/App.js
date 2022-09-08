@@ -2,22 +2,27 @@ import React, {useState, useEffect} from 'react';
 import {BrowserRouter, Navigate, Routes, Route} from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import {UserProvider, UserConsumer} from './utils/UserContext';
+import Cookies from 'js-cookie';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn]= useState(false);
-  const [user, setUser]= useState({name: '', imageString: '', token: ''});
+  //getting login data from cookies
+  const getLoginStatusFromCookies= () => {
+    const token= Cookies.get('token');
+    if(token==undefined) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   return (
-    <UserProvider value= {{user: user, setUser: (value)=> setUser(value)}}>
-      <BrowserRouter>
+    <BrowserRouter>
         <Routes>
           <Route exact path= '/login' element= {<Login/>}/>
-          <Route exact path= '/home' element= {<Home/>}/>
-          <Route exact path= '/' element= {isLoggedIn?  <Navigate to="/home"/> : <Navigate to="/login"/>}/>
+          <Route exact path= '/home' element= {<Home value= {{name: Cookies.get('name'), token: Cookies.get('token')}}/>}/>
+          <Route exact path= '/' element= {getLoginStatusFromCookies()?  <Navigate to="/home"/> : <Navigate to="/login"/>}/>
         </Routes>
-      </BrowserRouter>
-    </UserProvider>
+    </BrowserRouter>
   );
 }
 
