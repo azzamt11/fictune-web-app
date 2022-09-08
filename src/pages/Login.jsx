@@ -55,12 +55,12 @@ const Login= () => {
 
     //handle circular button click
     const cbHandleClick= () => {
-        alert('name= ' + '' +', token= '+ '');
+        //will be defined later.
     }
 
     //handle register click
     const handleRegisterClick= ()=> {
-        alert('clicked register');
+        //will be defined later.
     }
 
     //useEffect hook
