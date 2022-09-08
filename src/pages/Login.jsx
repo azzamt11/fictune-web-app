@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-
 //.......................main function...................//
 const Login= () => {
     //navigation function 
@@ -19,7 +18,6 @@ const Login= () => {
 
     //handle login click button
     const handleLoginClick= async()=> {
-        console.log('handleLoginClick on progress');
         setIsLoading(true);
         try {
             const response = await axios.post(
@@ -44,7 +42,6 @@ const Login= () => {
 
         } catch(e) {
             setIsLoading(false);
-            console.log(e);
             if (e.code=="ERR_BAD_RESPONSE") {
                 if (e.response.data.message=="invalid credentials") {
                     alert('Email atau Password yang anda masukkan tidak valid.');

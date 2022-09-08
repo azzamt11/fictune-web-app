@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 function Home({value}) {
     const {state}= useLocation();
-    console.log(value);
 
     return (
         <Container>
