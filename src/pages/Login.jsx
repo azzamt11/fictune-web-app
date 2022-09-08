@@ -99,7 +99,7 @@ const Container= styled.div`
     justify-content: center;
     height: 100vh;
     width: 100vw;
-    background-color: #252864;
+    background-color: #b070f0;
 `;
 const SubContainer= styled.div`
     display: flex;
@@ -119,7 +119,7 @@ const Span= styled.span`
     align-items: center;
     justify-content: center;
     font-size: 30px;
-    color: #232896;
+    color: #400080;
     margin-bottom: 35px;
     font-weight: bold;
 `;
@@ -158,14 +158,14 @@ const UnderLine= styled.div`
     height: 1px;
     width: 250px;
     margin-bottom: 21px;
-    background-color: #232896;
+    background-color: #400080;
 `;
 const Button= styled.button`
     margin-top: 30px;
     border: none;
     height: 40px;
     width: 170px;
-    background-color: #252896;
+    background-color: #400080;
     border-style: none;
     border-color: white;
     border-radius: 10px;
@@ -222,7 +222,7 @@ const FacebookCircularButton= styled.div`
 `;
 const Ancor= styled.div`
     text-decoration: none;
-    color: #a0a0ff;
+    color: #400080;
     margin-left: 5px;
     cursor: pointer;
 `;
