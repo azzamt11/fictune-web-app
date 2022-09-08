@@ -29,9 +29,6 @@ const Login= () => {
                 headers: { "Content-Type": "application/json" },
               }
             );
-            console.log('process halted');
-            console.log(response.data);
-            console.log('the value transfered succesfully');
             setIsLoading(false);
             Cookies.set('name', response.data.user.name);
             Cookies.set('token', response.data.token);
@@ -73,7 +70,7 @@ const Login= () => {
     useEffect(() => {
     }, [isLoading]);
     
-
+    //returnng elements
     return (
     <Container>
         <SubContainer>
