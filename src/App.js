@@ -9,7 +9,7 @@ function App() {
   //getting login data from cookies
   const getLoginStatusFromCookies= () => {
     const token= Cookies.get('token');
-    if(token==undefined) {
+    if(token===undefined) {
       return false;
     } else {
       return true;

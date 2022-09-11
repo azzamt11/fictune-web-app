@@ -40,8 +40,8 @@ const Register= ()=> {
             }
         } catch(e) {
             setIsLoading(false);
-            if (e.code=="ERR_BAD_RESPONSE") {
-                if (e.response.data.message=="invalid credentials") {
+            if (e.code==="ERR_BAD_RESPONSE") {
+                if (e.response.data.message==="invalid credentials") {
                     alert('Email atau Password yang anda masukkan tidak valid.');
                 }
             } else {
@@ -232,12 +232,6 @@ const FacebookCircularButton= styled.div`
     background-image: url("http://www.learningosn-soc.com/uploads/a/admin/05b80ee1d3.png");
     background-repeat: no-repeat;
     background-size: 103%;
-    cursor: pointer;
-`;
-const Ancor= styled.div`
-    text-decoration: none;
-    color: #400080;
-    margin-left: 5px;
     cursor: pointer;
 `;
 

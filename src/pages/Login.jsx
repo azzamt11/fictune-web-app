@@ -42,8 +42,8 @@ const Login= () => {
 
         } catch(e) {
             setIsLoading(false);
-            if (e.code=="ERR_BAD_RESPONSE") {
-                if (e.response.data.message=="invalid credentials") {
+            if (e.code==="ERR_BAD_RESPONSE") {
+                if (e.response.data.message==="invalid credentials") {
                     alert('Email atau Password yang anda masukkan tidak valid.');
                 }
             } else {

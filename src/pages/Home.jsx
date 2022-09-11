@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
@@ -43,7 +43,7 @@ function Home({value}) {
         window.addEventListener('resize', function() {
             
         }, false); 
-    }, []);
+    }, [navigate]);
 
     return (
         <Container>
