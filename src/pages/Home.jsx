@@ -16,7 +16,10 @@ function Home({value}) {
     useEffect(() => {
         window.addEventListener('scroll', function() {
             document.getElementById('header').style.cssText= window.scrollY>39? "height: 55px": "height: 90px";
-        }, false) 
+        }, false);
+        window.addEventListener('resize', function() {
+            
+        }, false); 
     }, []);
 
     return (
@@ -35,9 +38,51 @@ function Home({value}) {
                     </SubHeaderComponent>
                 </SubHeader>
             </Header>
-            <LeftBodyContainer>
+            <SideBodyContainer>
                 <div>This is left body container</div>
-            </LeftBodyContainer>
+            </SideBodyContainer>
+            <MainBodyContainer>
+                <MainBodySubContainer>
+                    <TitleText>Rekomendasi hari ini</TitleText>
+                    <RecomendedNovelListView>
+                        <NovelImageView>Novel 1</NovelImageView>
+                        <NovelImageView>Novel 2</NovelImageView>
+                        <NovelImageView>Novel 3</NovelImageView>
+                    </RecomendedNovelListView>
+                    <LeftBlock></LeftBlock>
+                    <RightBlock></RightBlock>
+                    <NovelStack>
+                        <SmallText>Romantis</SmallText>
+                        <NovelListView>
+                            <NovelImage>Novel 1</NovelImage>
+                            <NovelImage>Novel 2</NovelImage>
+                            <NovelImage>Novel 3</NovelImage>
+                            <NovelImage>Novel 4</NovelImage>
+                        </NovelListView>
+                        <SmallText>Keluarga</SmallText>
+                        <NovelListView>
+                            <NovelImage>Novel 1</NovelImage>
+                            <NovelImage>Novel 2</NovelImage>
+                            <NovelImage>Novel 3</NovelImage>
+                            <NovelImage>Novel 4</NovelImage>
+                        </NovelListView>
+                        <SmallText>Misteri</SmallText>
+                        <NovelListView>
+                            <NovelImage>Novel 1</NovelImage>
+                            <NovelImage>Novel 2</NovelImage>
+                            <NovelImage>Novel 3</NovelImage>
+                            <NovelImage>Novel 4</NovelImage>
+                        </NovelListView>
+                        <SmallText>Religius</SmallText>
+                        <NovelListView>
+                            <NovelImage>Novel 1</NovelImage>
+                            <NovelImage>Novel 2</NovelImage>
+                            <NovelImage>Novel 3</NovelImage>
+                            <NovelImage>Novel 4</NovelImage>
+                        </NovelListView>
+                    </NovelStack>
+                </MainBodySubContainer>
+            </MainBodyContainer>
         </Container>
     )
 }
@@ -46,7 +91,9 @@ const Container= styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
+    height: 3000px;
+    overflow-x: hidden;
 `;
 var Header= styled.div`
     position: fixed;
@@ -135,8 +182,9 @@ const SearchButton= styled.button`
     border-top-right-radius: 19px;
     border-bottom-right-radius: 19px;
 `;
-const LeftBodyContainer= styled.div`
-    height: 300vh;
+const SideBodyContainer= styled.div`
+    position: fixed;
+    height: 100vh;
     width: 500px;
     background-color: white;
     display: flex;
@@ -146,5 +194,131 @@ const LeftBodyContainer= styled.div`
     z-index: 5;
     box-shadow: 2px 0px 5px #888888;
 `;
+const MainBodyContainer= styled.div`
+    height: 3000px;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+`;
+const MainBodySubContainer= styled.div`
+    margin-right: 25px;
+    height: 3000px;
+    width: 780px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    margin-top: 110px;
+    padding: 0px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+`;
+const TitleText= styled.span`
+    position: absolute;
+    top: 120px;
+    left: 545px;
+    font-size: 25px;
+    color: #400080;
+    font-weight: bold;
+    display: flex;
+    height: 30px;
+    margin-bottom: 35px;
+    width: 400px;
+`;
+const RecomendedNovelListView= styled.div`
+    position: absolute;
+    top: 175px;
+    left: 545px;
+    height: 245px;
+    width: 1860px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    z-index: 2;
+    overflow-x: hidden;
+`;
+const LeftBlock= styled.div`
+    position: absolute;
+    top: 173px;
+    left: 500px;
+    height: 249px;
+    width: 200px;
+    z-index: 3;
+    overflow-x: hidden;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+`;
+const RightBlock= styled.div`
+    position: absolute;
+    top: 173px;
+    height: 249px;
+    right: 0px;
+    width: 200px;
+    z-index: 3;
+    overflow-x: hidden;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1));
+`;
+const NovelStack= styled.div`
+    position: absolute;
+    left: 545px;
+    top: 467px;
+    height: 1200px;
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow-x: hidden;
+    overflow-y: hidden;
+`;
+const NovelImageView= styled.div`
+    height: 240px;
+    width: 600px;
+    background-color: white;
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 1px;
+    border-color: #400080;
+`;
+const SmallText= styled.span`
+    font-size: 23px;
+    color: #400080;
+    font-weight: bold;
+    display: flex;
+    height: 30px;
+    margin-bottom: 20px;
+    width: 100%;
+`;
+const NovelListView= styled.div`
+    height: 200px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 30px;
+`;
+const NovelImage= styled.div`
+    height: 200px;
+    width: 150px;
+    margin-right: 25px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: #400080;
+`;
+
 
 export default Home
