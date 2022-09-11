@@ -20,7 +20,7 @@ const Register= ()=> {
         setIsLoading(true);
         try {
             const response = await axios.post(
-            'http://ftunebackend.herokuapp.com/api/register',
+            'https://ftunebackend.herokuapp.com/api/register',
              JSON.stringify({name: usernameRef.current.value, email: emailRef.current.value, password: passwordRef.current.value}),
             {
                 headers: { "Content-Type": "application/json" },

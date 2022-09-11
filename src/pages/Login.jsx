@@ -21,7 +21,7 @@ const Login= () => {
         setIsLoading(true);
         try {
             const response = await axios.post(
-              'http://ftunebackend.herokuapp.com/api/login',
+              'https://ftunebackend.herokuapp.com/api/login',
               JSON.stringify({ email: emailRef.current.value, password: passwordRef.current.value}),
               {
                 headers: { "Content-Type": "application/json" },
