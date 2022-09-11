@@ -1,45 +1,43 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-//.......................main function...................//
-const Login= () => {
-    //navigation function 
+const Register= ()=> {
     let navigate= useNavigate();
 
     //reference
+    const usernameRef= useRef('');
     const emailRef= useRef('');
     const passwordRef= useRef('');
 
     //states
     const [isLoading, setIsLoading]= useState(false);
-
+    
     //handle login click button
-    const loginButtonFunction= async()=> {
+    const registerButtonFunction= async()=> {
         setIsLoading(true);
         try {
             const response = await axios.post(
-              'http://ftunebackend.herokuapp.com/api/login',
-              JSON.stringify({ email: emailRef.current.value, password: passwordRef.current.value}),
-              {
+            'http://ftunebackend.herokuapp.com/api/register',
+             JSON.stringify({name: usernameRef.current.value, email: emailRef.current.value, password: passwordRef.current.value}),
+            {
                 headers: { "Content-Type": "application/json" },
-              }
-            );
+            });
             setIsLoading(false);
             Cookies.set('name', response.data.user.name);
             Cookies.set('token', response.data.token);
             Cookies.set('imageString', response.data.user.user_attribute_1);
             if (window.confirm('Situs ini menggunakan Cookies untuk memudahkan pengguna, apakah anda tetap ingin melanjutkan?')) {
                 navigate("/home", { state: {name: response.data.user.name, token: response.data.token, imageString:response.data.user.user_attribute_1 }});
-              } else {
+            } else {
                 Cookies.remove('name');
                 Cookies.remove('token');
+                document.getElementById('usernameInput').value= '';
                 document.getElementById('emailInput').value= '';
                 document.getElementById('passwordInput').value= '';
-              }
-
+            }
         } catch(e) {
             setIsLoading(false);
             if (e.code=="ERR_BAD_RESPONSE") {
@@ -58,44 +56,40 @@ const Login= () => {
         alert('Mohon maaf, fitur ini masih dalam proses pengembangan.');
     }
 
+    //handle circular button click
     const facebookButtonFunction= () => {
         alert('Mohon maaf, fitur ini masih dalam proses pengembangan.');
-    }
-
-    //handle register click
-    const registerButtonFunction= ()=> {
-        navigate("/register");
     }
 
     //useEffect hook
     useEffect(() => {
     }, [isLoading]);
-    
-    //returnng elements
+
+    //returning elements
     return (
     <Container>
         <SubContainer>
-            <Span>Login ke Fictune</Span>
-            <TextField hiddenLabel id="emailInput" defaultValue="" ref= {emailRef}/>
+            <Span>Register ke Fictune</Span>
+            <UsernameTextField hiddenLabel id="usernameInput" defaultValue="" ref= {usernameRef}/>
+            <UnderLine></UnderLine>
+            <EmailTextField hiddenLabel id="emailInput" defaultValue="" ref= {emailRef}/>
             <UnderLine></UnderLine>
             <PasswordTextField hiddenLabel id="passwordInput" defaultValue="" ref= {passwordRef}/>
             <UnderLine></UnderLine>
-            <Button onClick= {loginButtonFunction}>{isLoading? "Loading..." : "Login"}</Button>
-            <LoginSpan>atau login dengan akun google atau facebook:</LoginSpan>
-            <LoginButtonContainer>
+            <Button onClick= {registerButtonFunction}>{isLoading? "Loading..." : "Register"}</Button>
+            <RegisterSpan>atau register dengan akun google atau facebook:</RegisterSpan>
+            <RegisterButtonContainer>
                 <GoogleCircularButton onClick= {googleButtonFunction}></GoogleCircularButton>
                 <FacebookCircularButton onClick= {facebookButtonFunction}></FacebookCircularButton>
-            </LoginButtonContainer>
+            </RegisterButtonContainer>
         </SubContainer>
-        <RegisterSpan>Belum punya akun? <Ancor onClick= {registerButtonFunction}> Register</Ancor></RegisterSpan>
     </Container>
-    );
+  )
 }
 
-export default Login;
 
 
-//...............styling....................//
+//....................Styling......................//
 const Container= styled.div`
     display: flex;
     flex-direction: column;
@@ -111,7 +105,7 @@ const SubContainer= styled.div`
     align-items: center;
     justify-content: center;
     background-color: white;
-    height: 420px;
+    height: 500px;
     width: 350px;
     border-radius: 20px;
     box-shadow: 0px 0px 5px #dddddd;
@@ -127,7 +121,23 @@ const Span= styled.span`
     margin-bottom: 35px;
     font-weight: bold;
 `;
-const TextField= styled.input.attrs({
+const UsernameTextField= styled.input.attrs({
+    placeholder: 'Username',
+    placeholderTextColor: 'grey',
+    placeholderFontSize: '18px',
+    type: 'email'
+})`
+    height: 30px;
+    width: 250px;
+    border: none;
+    font-size: 18px; 
+    margin-bottom: 2px;
+    &:focus {
+        border: none;
+        outline: none;
+    }
+`;
+const EmailTextField= styled.input.attrs({
     placeholder: 'Email',
     placeholderTextColor: 'grey',
     placeholderFontSize: '18px',
@@ -180,7 +190,7 @@ const Button= styled.button`
         background-color: #3538a6
     }
 `;
-const LoginSpan= styled.span`
+const RegisterSpan= styled.span`
     height: 20px;
     width: 330px;
     display: flex;
@@ -190,7 +200,7 @@ const LoginSpan= styled.span`
     color: #333333;
     margin-top: 10px;
 `;
-const LoginButtonContainer= styled.div`
+const RegisterButtonContainer= styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -230,13 +240,5 @@ const Ancor= styled.div`
     margin-left: 5px;
     cursor: pointer;
 `;
-const RegisterSpan= styled.span`
-    height: 25px;
-    font-size: 19px;
-    font-color: white;
-    width: 300px;
-    margin-top: 10px;
-    display: flex; 
-    justify-content: center;
-    color: white;
-`;
+
+export default Register
