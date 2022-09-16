@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Outlet, Link, useLocation, useNavigate} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {Outlet, Link, useNavigate} from 'react-router-dom';
 import {useDispatch} from "react-redux";
 import {logout} from "../actions/AuthActions";
 import styled from 'styled-components';
