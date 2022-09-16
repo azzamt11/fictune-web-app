@@ -1,73 +1,77 @@
-import React, {useState, useEffect, useRef} from 'react';
-import styled from 'styled-components';
-import {useNavigate} from 'react-router-dom';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import React, {useState, eseEffect, useRef} from "react";
+import styled from "styled-components";
+import {register} from "../actions/AuthActions";
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
-const Register= ()=> {
-    let navigate= useNavigate();
 
-    //reference
-    const usernameRef= useRef('');
-    const emailRef= useRef('');
-    const passwordRef= useRef('');
+function Register() {
+    //reference declaration
+    const usernameRef= useRef();
+    const emailRef= useRef();
+    const passwordRef= useRef();
+    const confirmpasswordRef= useRef();
 
-    //states
-    const [isLoading, setIsLoading]= useState(false);
-    
-    //handle login click button
-    const registerButtonFunction= async()=> {
-        setIsLoading(true);
-        try {
-            const response = await axios.post(
-            'https://ftunebackend.herokuapp.com/api/register',
-             JSON.stringify({name: usernameRef.current.value, email: emailRef.current.value, password: passwordRef.current.value}),
-            {
-                headers: { "Content-Type": "application/json" },
-            });
-            setIsLoading(false);
-            Cookies.set('name', response.data.user.name);
-            Cookies.set('token', response.data.token);
-            Cookies.set('imageString', response.data.user.user_attribute_1);
-            if (window.confirm('Situs ini menggunakan Cookies untuk memudahkan pengguna, apakah anda tetap ingin melanjutkan?')) {
-                navigate("/home", { state: {name: response.data.user.name, token: response.data.token, imageString:response.data.user.user_attribute_1 }});
-            } else {
-                Cookies.remove('name');
-                Cookies.remove('token');
-                document.getElementById('usernameInput').value= '';
-                document.getElementById('emailInput').value= '';
-                document.getElementById('passwordInput').value= '';
-            }
-        } catch(e) {
-            setIsLoading(false);
-            if (e.code==="ERR_BAD_RESPONSE") {
-                if (e.response.data.message==="invalid credentials") {
-                    alert('Email atau Password yang anda masukkan tidak valid.');
-                }
-            } else {
-                alert('Koneksi bermasalah, silahkan periksa sambungan internet anda.');
-            }
+    //react-redux declaration
+    const initialState= {
+        username: "",
+        email: "",
+        password: "",
+        confirmpassword: ""
+    };
+    const loading= useSelector((state)=> state.registerReducer.loading);
+    const navigate= useNavigate();
+    const dispatch= useDispatch();
+
+    //useState declaration
+    const [data, setData]= useState(initialState);
+
+    //mismatch function
+    const mismatchPasswordFunction= ()=> {
+        alert("password dan konfirmasi passwordmu tidak sesuai, silahkan diisi kembali");
+        document.getElementById("passwordInput").value= "";
+        document.getElementById("passwordConfirmationInput").value= "";
+    }
+
+    //match password function
+    const matchPasswordFunction= ()=> {
+        if (passwordRef.current.value==="") {
+            alert("passwordmu kurang dari 6 karakter, silahkan diisi");
+        } else {
+            var dataOnSubmit= {
+                name: usernameRef.current.value,
+                email: emailRef.current.value,
+                password: passwordRef.current.value,
+            };
+            dispatch(register(dataOnSubmit, navigate));
         }
-        setIsLoading(false);
     }
 
-    //handle circular button click
-    const googleButtonFunction= () => {
-        alert('Mohon maaf, fitur ini masih dalam proses pengembangan.');
+    //registerClickFunction
+    const registerClickFunction= ()=>{
+        setData({
+            ...data, 
+            username: usernameRef.current.value,
+            email: emailRef.current.value, 
+            password: passwordRef.current.value,
+            confrimpassword: confirmpasswordRef.current.value
+        });
+        data.password===data.confirmpassword? matchPasswordFunction(data) : mismatchPasswordFunction();
+    };
+
+    //google click function
+    const googleClickFunction= ()=> {
+        //to do something.
     }
 
-    //handle circular button click
-    const facebookButtonFunction= () => {
-        alert('Mohon maaf, fitur ini masih dalam proses pengembangan.');
+    //facebok click function
+    const facebookClickFunction= ()=> {
+        //todo something.
     }
-
-    //useEffect hook
-    useEffect(() => {
-    }, [isLoading]);
-
-    //returning elements
+    
+    //returning value and rendering
     return (
-    <Container>
+        <Container>
         <SubContainer>
             <Span>Register ke Fictune</Span>
             <UsernameTextField hiddenLabel id="usernameInput" defaultValue="" ref= {usernameRef}/>
@@ -76,18 +80,18 @@ const Register= ()=> {
             <UnderLine></UnderLine>
             <PasswordTextField hiddenLabel id="passwordInput" defaultValue="" ref= {passwordRef}/>
             <UnderLine></UnderLine>
-            <Button onClick= {registerButtonFunction}>{isLoading? "Loading..." : "Register"}</Button>
+            <PasswordTextField hiddenLabel id="passwordConfirmationInput" defaultValue="" ref= {confirmpasswordRef}/>
+            <UnderLine></UnderLine>
+            <Button onClick= {registerClickFunction}>{loading? "Loading..." : "Register"}</Button>
             <RegisterSpan>atau register dengan akun google atau facebook:</RegisterSpan>
             <RegisterButtonContainer>
-                <GoogleCircularButton onClick= {googleButtonFunction}></GoogleCircularButton>
-                <FacebookCircularButton onClick= {facebookButtonFunction}></FacebookCircularButton>
+                <GoogleCircularButton onClick= {googleClickFunction}></GoogleCircularButton>
+                <FacebookCircularButton onClick= {facebookClickFunction}></FacebookCircularButton>
             </RegisterButtonContainer>
         </SubContainer>
     </Container>
   )
 }
-
-
 
 //....................Styling......................//
 const Container= styled.div`
@@ -105,18 +109,19 @@ const SubContainer= styled.div`
     align-items: center;
     justify-content: center;
     background-color: white;
-    height: 500px;
-    width: 350px;
+    height: 420px;
+    width: 290px;
     border-radius: 20px;
-    box-shadow: 0px 0px 5px #dddddd;
+    border-width: 1px;
+    border-color: #400080;
 `;
 const Span= styled.span`
-    height: 60px;
-    width: 300px;
+    height: 50px;
+    width: 270px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 25px;
     color: #400080;
     margin-bottom: 35px;
     font-weight: bold;
@@ -124,13 +129,12 @@ const Span= styled.span`
 const UsernameTextField= styled.input.attrs({
     placeholder: 'Username',
     placeholderTextColor: 'grey',
-    placeholderFontSize: '18px',
-    type: 'email'
+    type: 'text'
 })`
-    height: 30px;
-    width: 250px;
+    height: 25px;
+    width: 230px;
     border: none;
-    font-size: 18px; 
+    font-size: 14px; 
     margin-bottom: 2px;
     &:focus {
         border: none;
@@ -140,13 +144,12 @@ const UsernameTextField= styled.input.attrs({
 const EmailTextField= styled.input.attrs({
     placeholder: 'Email',
     placeholderTextColor: 'grey',
-    placeholderFontSize: '18px',
     type: 'email'
 })`
-    height: 30px;
-    width: 250px;
+    height: 25px;
+    width: 230px;
     border: none;
-    font-size: 18px; 
+    font-size: 14px; 
     margin-bottom: 2px;
     &:focus {
         border: none;
@@ -158,10 +161,10 @@ const PasswordTextField= styled.input.attrs({
     placeholderTextColor: 'grey', 
     type: 'password'
 })`
-    height: 30px;
-    width: 250px;
+    height: 25px;
+    width: 230px;
     border: none;
-    font-size: 18px;
+    font-size: 14px; 
     margin-bottom: 2px;
     &:focus {
         border: none;
@@ -170,21 +173,21 @@ const PasswordTextField= styled.input.attrs({
 `;
 const UnderLine= styled.div`
     height: 1px;
-    width: 250px;
-    margin-bottom: 21px;
+    width: 230px;
+    margin-bottom: 16px;
     background-color: #400080;
 `;
 const Button= styled.button`
-    margin-top: 30px;
+    margin-top: 25px;
     border: none;
-    height: 40px;
-    width: 170px;
+    height: 35px;
+    width: 150px;
     background-color: #400080;
     border-style: none;
     border-color: white;
     border-radius: 10px;
     color: white;
-    font-size: 19px;
+    font-size: 15px;
     cursor: pointer;
     &:hover {
         background-color: #3538a6
@@ -192,11 +195,11 @@ const Button= styled.button`
 `;
 const RegisterSpan= styled.span`
     height: 20px;
-    width: 330px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15px;
+    font-size: 12px;
     color: #333333;
     margin-top: 10px;
 `;
@@ -204,14 +207,14 @@ const RegisterButtonContainer= styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 50px;
-    width: 115px;
+    height: 30px;
+    width: 90px;
     margin-top: 10px;
 `; 
 const GoogleCircularButton= styled.div`
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
     background-color: grey;
     margin: 0;
     padding: 2px;
@@ -221,9 +224,9 @@ const GoogleCircularButton= styled.div`
     cursor: pointer;
 `;
 const FacebookCircularButton= styled.div`
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
     margin: 0;
     padding: 2px;
     display: flex;

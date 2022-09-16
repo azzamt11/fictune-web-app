@@ -1,47 +1,42 @@
-import React, {useEffect} from 'react'
-import {useLocation, useNavigate} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Outlet, Link, useLocation, useNavigate} from 'react-router-dom';
+import {useDispatch} from "react-redux";
+import {logout} from "../actions/AuthActions";
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
 
-function Home({value}) {
-    var RNLVParam= 445;
-    const navigate= useNavigate();
-    const {state}= useLocation();
-    const coin= '2000';
+function Home({user}) {
+    //dummy
+    const coin= "2000";
 
+    //navigation and dispatch
+    const navigate= useNavigate();
+    const dispatch= useDispatch();
+
+    //search function
     const onSearch= ()=> {
         //something to do on searching.
     }
 
-    const logoutButtonFunction= ()=> {
-        Cookies.remove('name');
-        Cookies.remove('token');
-        navigate("/login");
+    //logout function
+    const logoutClickFunction= ()=> {
+        dispatch(logout(user.token, navigate));
+        Cookies.remove("JSONprofile");
     }
 
-    const alertButtonFunction= ()=> {
+    //alert function
+    const alertClickFunction= ()=> {
         document.getElementById('glass').style.cssText= 'display: none';
     }
-    
-    const RNLVRightArrowButtonFunction= ()=> {
-        if (RNLVParam<= 445- 622*6) {
-            RNLVParam= 445;
-        } else {
-            RNLVParam= RNLVParam- 622;
-        }
-        document.getElementById('rnlv').style.cssText= `left: ${RNLVParam}px`;
-    }
 
+    //useEffect
     useEffect(() => {
-        const token= Cookies.get('token');
-        if (token==null) {
-            navigate("/login");
-        }
         window.addEventListener('scroll', function() {
-            document.getElementById('header').style.cssText= window.scrollY>39? "height: 55px": "height: 90px";
+            document.getElementById('header').style.cssText= window.scrollY>39? "height: 50px": "height: 73px";
+            document.getElementById('side-body-subcontainer').style.cssText= window.scrollY>39? "top: 45px": "top: 65px";
         }, false);
         window.addEventListener('resize', function() {
-            
+            //to do something.
         }, false); 
     }, [navigate]);
 
@@ -53,25 +48,25 @@ function Home({value}) {
                         <AlertSymbol src= 'https://thumbs.dreamstime.com/b/warning-sign-yellow-exclamation-mark-icon-danger-sign-attention-sign-caution-alert-symbol-orange-isolated-white-background-144828378.jpg'/>
                         <AlertSpan>Mohon maaf, Aplikasi ini sedang dalam proses pengembangan.</AlertSpan>
                     </AlertMainBody>
-                    <AlertButton onClick= {alertButtonFunction}>Biarkan Saya Mengamati</AlertButton>
+                    <AlertButton onClick= {alertClickFunction}>Biarkan Saya Mengamati</AlertButton>
                 </DevelopmentAlert>
             </Glass>
             <Header id= 'header'>
                 <SubHeader>
                     <SubHeaderComponent id= 'main-subheader'>
-                        <Logo>Fictune</Logo>
+                        <Link className= 'main-react-link' to= '/home'><Logo>Fictune</Logo></Link>
                         <Search handleSubmit= {onSearch}>
                             <SearchField/>
                             <SearchButton>Go</SearchButton>
                         </Search>
                     </SubHeaderComponent>
                     <SubHeaderComponent id= 'logout-subheader'>
-                        <LogoutText onClick= {logoutButtonFunction}>Logout</LogoutText>
+                        <LogoutText onClick= {logoutClickFunction}>Logout</LogoutText>
                     </SubHeaderComponent>
                 </SubHeader>
             </Header>
             <SideBodyContainer>
-                <SideBodySubContainer>
+                <SideBodySubContainer id= 'side-body-subcontainer'>
                     <SideBodyHeader>
                         <TopMenuText>Beli Koin</TopMenuText>
                         <TopMenuText>Daftar Premium</TopMenuText>
@@ -79,131 +74,25 @@ function Home({value}) {
                     <UserProfileContainer>
                         <UserImage></UserImage>
                         <UserData>
-                            <UserName>{state? state.name : value.name}</UserName>
+                            <UserName>{user? user.user.name : "no-user"}</UserName>
                             <CoinImage src= 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlZ1wn6hO_Ea4CIGhSrQeBeueUmgFr4Zs3qg&usqp=CAU'/>
                             <UserCoin>{coin}</UserCoin>
                         </UserData>
                     </UserProfileContainer>
                     <DividerLine></DividerLine>
-                    <MenuText>Novel Favoritku</MenuText>
+                    <Link className= 'react-link' to= '/home/my-favorite-novels'><MenuText>Novel Favoritku</MenuText></Link>
                     <DividerLine></DividerLine>
-                    <MenuText>Novel Karanganku</MenuText>
+                    <Link className= 'react-link' to= '/home/my-novels'><MenuText>Novel Karanganku</MenuText></Link>
                     <DividerLine></DividerLine>
-                    <MenuText>Bantuan</MenuText>
+                    <Link className= 'react-link' to= '/home/help'><MenuText>Bantuan</MenuText></Link>
                     <DividerLine></DividerLine>
-                    <MenuText>Pengaturan</MenuText>
+                    <Link className= 'react-link' to= '/home/setting'><MenuText>Pengaturan</MenuText></Link>
                     <DividerLine></DividerLine>
-                    <MenuText>Tentang Developer</MenuText>
+                    <Link className= 'react-link' to= '/home/about-developer'><MenuText>Tentang Developer</MenuText></Link>
                 </SideBodySubContainer>
             </SideBodyContainer>
             <MainBodyContainer>
-                <MainBodySubContainer>
-                    <TitleText>Rekomendasi hari ini</TitleText>
-                    <RecomendedNovelListView id= 'rnlv'>
-                        <NovelImageView>Novel 1</NovelImageView>
-                        <NovelImageView>Novel 2</NovelImageView>
-                        <NovelImageView>Novel 3</NovelImageView>
-                        <NovelImageView>Novel 4</NovelImageView>
-                        <NovelImageView>Novel 5</NovelImageView>
-                        <NovelImageView>Novel 6</NovelImageView>
-                        <NovelImageView>Novel 7</NovelImageView>
-                    </RecomendedNovelListView>
-                    <LeftBlock></LeftBlock>
-                    <RightBlock></RightBlock>
-                    <RNLVRightArrowButton onClick= {RNLVRightArrowButtonFunction}></RNLVRightArrowButton>
-                    <NovelStack>
-                        <SmallText>Romantis</SmallText>
-                        <NovelListView>
-                            <NovelImage>Novel 1</NovelImage>
-                            <NovelImage>Novel 2</NovelImage>
-                            <NovelImage>Novel 3</NovelImage>
-                            <NovelImage>Novel 4</NovelImage>
-                            <NovelImage>Novel 5</NovelImage>
-                            <NovelImage>Novel 6</NovelImage>
-                            <NovelImage>Novel 7</NovelImage>
-                            <NovelImage>Novel 8</NovelImage>
-                            <NovelImage>Novel 9</NovelImage>
-                            <NovelImage>Novel 10</NovelImage>
-                            <NovelImage>Novel 11</NovelImage>
-                            <NovelImage>Novel 12</NovelImage>
-                        </NovelListView>
-                        <SmallText>Keluarga</SmallText>
-                        <NovelListView>
-                        <NovelImage>Novel 1</NovelImage>
-                            <NovelImage>Novel 2</NovelImage>
-                            <NovelImage>Novel 3</NovelImage>
-                            <NovelImage>Novel 4</NovelImage>
-                            <NovelImage>Novel 5</NovelImage>
-                            <NovelImage>Novel 6</NovelImage>
-                            <NovelImage>Novel 7</NovelImage>
-                            <NovelImage>Novel 8</NovelImage>
-                            <NovelImage>Novel 9</NovelImage>
-                            <NovelImage>Novel 10</NovelImage>
-                            <NovelImage>Novel 11</NovelImage>
-                            <NovelImage>Novel 12</NovelImage>
-                        </NovelListView>
-                        <SmallText>Misteri</SmallText>
-                        <NovelListView>
-                        <NovelImage>Novel 1</NovelImage>
-                            <NovelImage>Novel 2</NovelImage>
-                            <NovelImage>Novel 3</NovelImage>
-                            <NovelImage>Novel 4</NovelImage>
-                            <NovelImage>Novel 5</NovelImage>
-                            <NovelImage>Novel 6</NovelImage>
-                            <NovelImage>Novel 7</NovelImage>
-                            <NovelImage>Novel 8</NovelImage>
-                            <NovelImage>Novel 9</NovelImage>
-                            <NovelImage>Novel 10</NovelImage>
-                            <NovelImage>Novel 11</NovelImage>
-                            <NovelImage>Novel 12</NovelImage>
-                        </NovelListView>
-                        <SmallText>Religius</SmallText>
-                        <NovelListView>
-                            <NovelImage>Novel 1</NovelImage>
-                            <NovelImage>Novel 2</NovelImage>
-                            <NovelImage>Novel 3</NovelImage>
-                            <NovelImage>Novel 4</NovelImage>
-                            <NovelImage>Novel 5</NovelImage>
-                            <NovelImage>Novel 6</NovelImage>
-                            <NovelImage>Novel 7</NovelImage>
-                            <NovelImage>Novel 8</NovelImage>
-                            <NovelImage>Novel 9</NovelImage>
-                            <NovelImage>Novel 10</NovelImage>
-                            <NovelImage>Novel 11</NovelImage>
-                            <NovelImage>Novel 12</NovelImage>
-                        </NovelListView>
-                        <SmallText>Fiksi Ilmiah</SmallText>
-                        <NovelListView>
-                            <NovelImage>Novel 1</NovelImage>
-                            <NovelImage>Novel 2</NovelImage>
-                            <NovelImage>Novel 3</NovelImage>
-                            <NovelImage>Novel 4</NovelImage>
-                            <NovelImage>Novel 5</NovelImage>
-                            <NovelImage>Novel 6</NovelImage>
-                            <NovelImage>Novel 7</NovelImage>
-                            <NovelImage>Novel 8</NovelImage>
-                            <NovelImage>Novel 9</NovelImage>
-                            <NovelImage>Novel 10</NovelImage>
-                            <NovelImage>Novel 11</NovelImage>
-                            <NovelImage>Novel 12</NovelImage>
-                        </NovelListView>
-                        <SmallText>Traveling</SmallText>
-                        <NovelListView>
-                            <NovelImage>Novel 1</NovelImage>
-                            <NovelImage>Novel 2</NovelImage>
-                            <NovelImage>Novel 3</NovelImage>
-                            <NovelImage>Novel 4</NovelImage>
-                            <NovelImage>Novel 5</NovelImage>
-                            <NovelImage>Novel 6</NovelImage>
-                            <NovelImage>Novel 7</NovelImage>
-                            <NovelImage>Novel 8</NovelImage>
-                            <NovelImage>Novel 9</NovelImage>
-                            <NovelImage>Novel 10</NovelImage>
-                            <NovelImage>Novel 11</NovelImage>
-                            <NovelImage>Novel 12</NovelImage>
-                        </NovelListView>
-                    </NovelStack>
-                </MainBodySubContainer>
+                <Outlet/>
             </MainBodyContainer>
         </Container>
     )
@@ -223,7 +112,7 @@ var Header= styled.div`
     top: 0;
     left: 0;
     margin: 0;
-    height: 90px;
+    height: 73px;
     width: 100vw;
     padding: 0;
     background-color:#400080;
@@ -254,13 +143,8 @@ const SubHeaderComponent= styled.div`
     align-items: center;
 `;
 const Logo= styled.span`
-    height: 100%;
-    width: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-weight: bold;
-    font-size: 27px;
+    font-size: 25px;
     color: white;
 `;
 const Search= styled.div`
@@ -277,10 +161,10 @@ const SearchField= styled.input.attrs({
     type: "text"
 })`
     color: black;
-    font-size: 16px;
+    font-size: 14px;
     beckground-color: white;
     border: none;
-    height: 38px;
+    height: 34px;
     width: 210px;
     padding-left: 19px;
     border-top-left-radius: 19px;
@@ -291,7 +175,7 @@ const SearchField= styled.input.attrs({
     }
 `;
 const SearchButton= styled.button`
-    height: 40px;
+    height: 36px;
     width: 100px;
     background-color: grey;
     display: flex;
@@ -305,7 +189,7 @@ const SearchButton= styled.button`
 const SideBodyContainer= styled.div`
     position: fixed;
     height: 100vh;
-    width: 400px;
+    width: 350px;
     background-color: white;
     display: flex;
     z-index: 5;
@@ -315,7 +199,7 @@ const SideBodySubContainer= styled.div`
     position: relative;
     height: 100vh- 90px;
     width: 100%;
-    top: 90px;
+    top: 65px;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -323,6 +207,7 @@ const SideBodySubContainer= styled.div`
     align-items: flex-start;
     padding-left: 15px;
     padding-top: 10px;
+    transition: all 0.5s ease 0s;
 `;
 const MainBodyContainer= styled.div`
     height: 2500px;
@@ -335,124 +220,8 @@ const MainBodyContainer= styled.div`
     justify-content: flex-end;
     align-items: flex-start;
 `;
-const MainBodySubContainer= styled.div`
-    margin-right: 25px;
-    height: 2500px;
-    width: 780px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    margin-top: 110px;
-    padding: 0px;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-`;
-const TitleText= styled.span`
-    position: absolute;
-    top: 120px;
-    left: 445px;
-    font-size: 25px;
-    color: #400080;
-    font-weight: bold;
-    display: flex;
-    height: 30px;
-    margin-bottom: 35px;
-    width: 400px;
-    overflow-y: hidden;
-`;
-const RecomendedNovelListView= styled.div`
-    position: absolute;
-    top: 175px;
-    left: 445px;
-    height: 245px;
-    width: 10000px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    z-index: 2;
-    overflow-x: hidden;
-    transition: all 0.5s ease 0s;
-`;
-const LeftBlock= styled.div`
-    position: absolute;
-    top: 173px;
-    left: 400px;
-    height: 2000px;
-    width: 50px;
-    z-index: 3;
-    overflow-x: hidden;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
-`;
-const RightBlock= styled.div`
-    position: absolute;
-    top: 173px;
-    height: 2000px;
-    right: 0px;
-    width: 200px;
-    z-index: 3;
-    overflow-x: hidden;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1));
-`;
-const NovelStack= styled.div`
-    position: absolute;
-    left: 445px;
-    top: 467px;
-    height: 1700px;
-    width: 10000px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    overflow-x: hidden;
-    overflow-y: hidden;
-`;
-const NovelImageView= styled.div`
-    height: 240px;
-    width: 600px;
-    background-color: white;
-    margin-right: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-style: solid;
-    border-radius: 20px;
-    border-width: 1px;
-    border-color: #400080;
-`;
-const SmallText= styled.span`
-    font-size: 23px;
-    color: #400080;
-    font-weight: bold;
-    display: flex;
-    height: 30px;
-    margin-bottom: 20px;
-    width: 100%;
-`;
-const NovelListView= styled.div`
-    height: 200px;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    margin-bottom: 30px;
-`;
-const NovelImage= styled.div`
-    height: 200px;
-    width: 150px;
-    margin-right: 25px;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-style: solid;
-    border-radius: 10px;
-    border-width: 1px;
-    border-color: #400080;
-`;
 const LogoutText= styled.button`
-    font-size: 18px;
+    font-size: 15px;
     color: #ffff00;
     font-weight: bold;
     border: none;
@@ -478,6 +247,7 @@ const TopMenuText= styled.span`
     height: 30px;
     margin-left: 15px;
     color: #888888;
+    font-size: 14px;
     cursor: pointer;
     &:hover {
         color: #400080;
@@ -510,12 +280,12 @@ const UserData= styled.div`
     justify-content: center;
 `;
 const UserName= styled.span`
-    font-size: 18px;
+    font-size: 16px;
     color: #400080;
     margin-right: 10px;
 `;
 const UserCoin= styled.span`
-    fonst-size: 18px;
+    fonst-size: 16px;
     color: #400080;
     margin-left: 5px;
 `;
@@ -532,32 +302,14 @@ const DividerLine= styled.div`
     background-color: #cccccc;
 `;
 const MenuText= styled.span`
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: #909090;
-    margin: 10px 0px 5px 15px;
     cursor: pointer;
     transition: all 0.5s ease 0s;
     &:hover {
         color: #400080;
     }
-`;
-const RNLVRightArrowButton= styled.button`
-    position: absolute;
-    z-index: 4;
-    top: 262px;
-    right: 50px;
-    height: 70px;
-    width: 70px;
-    background-color: white;
-    border-radius: 35px;
-    border-width: 1px;
-    border-color: #400080;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-image: url("RightArrowIcon.png");
-    cursor: pointer;
 `;
 const Glass= styled.div`
     position: fixed;
@@ -592,7 +344,7 @@ const AlertSpan= styled.span`
     display: flex;
     alin-items: center;
     color: white;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     overflow-wrap: normal;
     text-align: left;  
