@@ -6,4 +6,4 @@ export const login= (request)=> axios.post(`${URL}/login`, JSON.stringify(reques
 
 export const register = (request) => axios.post(`${URL}/register`, JSON.stringify(request), {headers: {"Content-Type": "application/json"}});
 
-export const logout = (token) => axios.post(`${URL}/logout`, {headers: {"Content-Type": "application/json", "authorization": `Bearer ${token}`}});
+export const logout = (token) => axios.post(`${URL}/logout`, {}, {headers: {"Content-Type": "application/json", Authorization: `Bearer ${token}`, Accept: "application/json"}});

@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import NovelImage from '../components/NovelImage';
-import axios from 'axios';
-import SomethingIsWrong from './SomethingIsWrong';
 
 const RecommendedNovels= ({token})=> {
     const novelNumbers= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];

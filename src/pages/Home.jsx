@@ -3,9 +3,8 @@ import {Outlet, Link, useNavigate} from 'react-router-dom';
 import {useDispatch} from "react-redux";
 import {logout} from "../actions/AuthActions";
 import styled from 'styled-components';
-import Cookies from 'js-cookie';
 
-function Home({user}) {
+const Home= ({user})=> {
     //dummy
     const coin= "2000";
 
@@ -20,8 +19,7 @@ function Home({user}) {
 
     //logout function
     const logoutClickFunction= ()=> {
-        dispatch(logout(user.token, navigate));
-        Cookies.remove("JSONprofile");
+        dispatch(logout(user, navigate));
     }
 
     //alert function
@@ -34,9 +32,6 @@ function Home({user}) {
         window.addEventListener('scroll', function() {
             document.getElementById('header').style.cssText= window.scrollY>39? "height: 50px": "height: 73px";
             document.getElementById('side-body-subcontainer').style.cssText= window.scrollY>39? "top: 45px": "top: 65px";
-        }, false);
-        window.addEventListener('resize', function() {
-            //to do something.
         }, false); 
     }, [navigate]);
 

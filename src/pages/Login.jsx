@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useRef} from 'react';
 import styled from "styled-components";
 import {login} from "../actions/AuthActions";
 import {useDispatch, useSelector} from "react-redux";
@@ -11,16 +11,11 @@ function Login() {
     const passwordRef= useRef("");
 
     //react-redux declaration
-    const initialState= {
-        email: "",
-        password: "",
-    };
-    const loading= useSelector((state)=> state.loginReducer.loading);
+    const loading= useSelector((state)=> state.loading);
     const navigate= useNavigate();
     const dispatch= useDispatch();
 
     //useState declaration
-    const [data, setData]= useState(initialState);
 
     //login click function
     const loginClickFunction= ()=>{
@@ -29,7 +24,6 @@ function Login() {
             email: emailRef.current.value,
             password: passwordRef.current.value,
         };
-        setData(dataOnSubmit);
         dispatch(login(dataOnSubmit, navigate));
     };
 

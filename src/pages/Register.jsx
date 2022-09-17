@@ -1,4 +1,4 @@
-import React, {useState, eseEffect, useRef} from "react";
+import React, {useRef} from "react";
 import styled from "styled-components";
 import {register} from "../actions/AuthActions";
 import {useDispatch, useSelector} from "react-redux";
@@ -13,18 +13,9 @@ function Register() {
     const confirmpasswordRef= useRef();
 
     //react-redux declaration
-    const initialState= {
-        username: "",
-        email: "",
-        password: "",
-        confirmpassword: ""
-    };
-    const loading= useSelector((state)=> state.registerReducer.loading);
+    const loading= useSelector((state)=> state.loading);
     const navigate= useNavigate();
     const dispatch= useDispatch();
-
-    //useState declaration
-    const [data, setData]= useState(initialState);
 
     //mismatch function
     const mismatchPasswordFunction= ()=> {
@@ -34,29 +25,24 @@ function Register() {
     }
 
     //match password function
-    const matchPasswordFunction= ()=> {
-        if (passwordRef.current.value==="") {
+    const matchPasswordFunction= (input)=> {
+        console.log(input);
+        if (input.password.length<6) {
             alert("passwordmu kurang dari 6 karakter, silahkan diisi");
         } else {
-            var dataOnSubmit= {
-                name: usernameRef.current.value,
-                email: emailRef.current.value,
-                password: passwordRef.current.value,
-            };
-            dispatch(register(dataOnSubmit, navigate));
+            dispatch(register(input, navigate));
         }
     }
 
     //registerClickFunction
     const registerClickFunction= ()=>{
-        setData({
-            ...data, 
-            username: usernameRef.current.value,
-            email: emailRef.current.value, 
+        var dataOnSubmit= {
+            name: usernameRef.current.value,
+            email: emailRef.current.value,
             password: passwordRef.current.value,
-            confrimpassword: confirmpasswordRef.current.value
-        });
-        data.password===data.confirmpassword? matchPasswordFunction(data) : mismatchPasswordFunction();
+            confirmpassword: confirmpasswordRef.current.value
+        };
+        dataOnSubmit.password===dataOnSubmit.confirmpassword? matchPasswordFunction(dataOnSubmit) : mismatchPasswordFunction();
     };
 
     //google click function
