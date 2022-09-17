@@ -146,7 +146,7 @@ const NovelImageView= styled.div`
     justify-content: center;
     align-items: center;
     border-style: solid;
-    border-radius: 20px;
+    border-radius: 10px;
     border-width: 1px;
     border-color: #400080;
 `;
