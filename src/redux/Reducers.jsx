@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-const reducers = (state = { authData: null, loading: false, error: false, updateLoading: false }, action) => {
+const reducers = (state = { authData: null, loading: false, error: false, updateLoading: false, posts: null, postsOnUpload: null, postLoading: false, idLoaded: 0, genreLoaded: 0}, action) => {
     switch (action.type) {
         //login
         case "login_processing":
@@ -38,17 +38,17 @@ const reducers = (state = { authData: null, loading: false, error: false, update
         case "post_processing":
             return { ...state, error: false, uploading: true };
         case "post_success":
-            return { ...state, posts: [action.data, ...state.posts], uploading: false, error: false };
+            return { ...state, postsOnUpload: action.data, uploading: false, error: false };
         case "post_failed":
             return { ...state, uploading: false, error: true };
 
         //retrieve
         case "retrieve_processing":
-            return { ...state, loading: true, error: false };
+            return { ...state, postLoading: true, error: false};
         case "retrieve_success":
-            return { ...state, posts: action.data, loading: false, error: false };
+            return { ...state, posts: action.data, postLoading: false, error: false};
         case "retrieve_failed":
-            return { ...state, loading: false, error: true };
+            return { ...state, postLoading: false, error: true };
         default: return state;
     }
 };

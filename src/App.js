@@ -23,7 +23,7 @@ function App() {
     <Routes>
       <Route exact path= "/" element= {user && token? <Navigate to= "/home"/>: <Navigate to= "/login"/>}/>
       <Route exact path= "/home/" element= {user && token? <Home user= {user}/>: <Navigate to= "/login"/>}>
-        <Route path= '' element= {user && token? <RecommendedNovels/> : <Navigate to = "/login"/>}/>
+        <Route path= '' element= {user && token? <RecommendedNovels token= {user.token}/> : <Navigate to = "/login"/>}/>
         <Route path= 'my-favorite-novels' element= {user && token? <MyFavoriteNovels/> : <Navigate to= "/login"/>}/>
         <Route path= 'my-novels' element= {user && token? <MyNovels/>: <Navigate to= "/login"/>}/>
         <Route path= 'help' element= {user && token? <Help/> : <Navigate to= "/login"/>}/>

@@ -2,10 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import NovelImage from '../components/NovelImage';
 
-const RecommendedNovels= ({token})=> {
-    const novelNumbers= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+const RecommendedNovels= ()=> {
+    //nove image
+    const novelNumbers= [1, 2, 3, 4, 5, 6];
     const novelList= (number, genre)=> {
-        return <NovelImage SId= {number} genre= {genre} token= {token} id= {"number" + {number}+ "-genre" + {genre}}/>
+        return <NovelImage SId= {number} genre= {genre} id= {"number" + {number}+ "-genre" + {genre}}/>
     };
     var RNLVParam= 395;
     const RNLVRightArrowButtonFunction= ()=> {
@@ -16,6 +18,9 @@ const RecommendedNovels= ({token})=> {
         }
         document.getElementById('rnlv').style.cssText= `left: ${RNLVParam}px`;
     }
+
+    //data array
+    const postArray= [];
 
     return (
         <MainBodySubContainer>

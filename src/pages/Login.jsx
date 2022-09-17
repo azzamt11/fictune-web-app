@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import styled from "styled-components";
 import {login} from "../actions/AuthActions";
 import {useDispatch, useSelector} from "react-redux";
@@ -14,9 +14,7 @@ function Login() {
     const loading= useSelector((state)=> state.loading);
     const navigate= useNavigate();
     const dispatch= useDispatch();
-
-    //useState declaration
-
+    
     //login click function
     const loginClickFunction= ()=>{
         console.log("step 1: login click function in progress");

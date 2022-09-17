@@ -1,0 +1,67 @@
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import { useParams } from "react-router-dom";
+import {useSelector, useDispatch} from "react-redux";
+import {getPost} from "../actions/PostActions";
+
+const NovelImage= ({genre, SId})=> {
+    console.log("main genre= " + genre+ ", secondary id= "+ SId);
+    //redux declarations
+    const dispatch = useDispatch();
+    const user= useSelector((state)=>state.authData);
+    let post = useSelector((state) => state.post);
+    let postLoading = useSelector((state) => state.postLoading);
+    let idLoaded= useSelector((state)=> state.idLoaded);
+    let genreLoaded= useSelector((state)=> state.genreLoaded);
+
+    //user token
+    const token= user.token;
+
+    //novel click function
+    const novelClickFunction= ()=> {
+        console.log(post);
+        console.log(postLoading);
+        console.log("token= "+ token);
+    };
+
+    const [novelStyle, setNovelStyle]= useState("background-color: blue;");
+
+    //useEffect
+    useEffect(()=> {
+        var previousIdIsLoaded= (idLoaded===(SId-1))||SId===1;
+        var previousGenreIsLoaded= (genreLoaded===(genre-1) && idLoaded===6)||genre===1;
+        var previousNovelImageIsLoaded= previousGenreIsLoaded && previousIdIsLoaded;
+        console.log("previousNovelImageIsLoaded= "+ previousNovelImageIsLoaded);
+        if (genreLoaded===genre && idLoaded===SId) {"number" + {number}+ "-genre" + {genre}}
+        if(previousNovelImageIsLoaded) {
+            console.log("dispatching genre: "+ genre+ "-SId: "+ SId);
+            dispatch(getPost({genre: genre, index: SId, token: token}));
+        }
+    }, [idLoaded]);
+
+    const novelImage= "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+
+    //rendering
+    return (
+        <Image onClick= {novelClickFunction} style= {novelStyle}>{(genreLoaded==genre && idLoaded===SId).toString()}</Image>
+    );
+}
+
+export default NovelImage
+
+//...................styling.............//
+const Image= styled.div`
+    height: 200px;
+    width: 150px;
+    margin-right: 25px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: #400080;
+`;
+
+

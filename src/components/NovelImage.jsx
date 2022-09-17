@@ -1,17 +1,30 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
+import {useSelector} from "react-redux";
 
-const NovelImage= ({SId, genre, token, ...restProps})=> {
+const NovelImage= ({genre, SId})=> {
+    //posts
+    const posts= useSelector((state)=> state.posts);
+    console.log("main genre= " + genre+ ", secondary id= "+ SId);
+
     //novel click function
     const novelClickFunction= ()=> {
-        //nothing to do yet.
-    };
+        console.log(posts);
+    }
+
+    //content
+    const [content, setContent]= useState(null);
+    const idLoaded= useSelector((state)=> state.idloaded);
+    const genreLoaded= useSelector((state)=> state.genreloaded);
+    const post= useSelector((state)=> state.post);
+
+    //useEffect
+    useEffect(()=> {
+    }, [idLoaded]);
 
     //rendering
     return (
-        <Image onClick= {novelClickFunction}>
-            <span>Novel</span>
-        </Image>
+        <Image onClick= {novelClickFunction}>{idLoaded===SId && genreLoaded===genre? post.toString().slice(100, 120) : "no-data"}</Image>
     );
 }
 

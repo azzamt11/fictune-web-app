@@ -1,12 +1,18 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Outlet, Link, useNavigate} from 'react-router-dom';
-import {useDispatch} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {logout} from "../actions/AuthActions";
 import styled from 'styled-components';
+import {getPosts} from "../actions/PostActions";
 
-const Home= ({user})=> {
+const Home= ()=> {
     //dummy
     const coin= "2000";
+
+    //user data
+    const user= useSelector((state)=> state.authData); 
+    const token= user.token;
+    const posts= useSelector((state)=> state.posts);
 
     //navigation and dispatch
     const navigate= useNavigate();
@@ -27,12 +33,21 @@ const Home= ({user})=> {
         document.getElementById('glass').style.cssText= 'display: none';
     }
 
+    //post data array
+    const fetchNovelImage= async(token)=> {
+        console.log("fetching post in progress");
+        await dispatch(getPosts({token: token}));
+    }
+
     //useEffect
     useEffect(() => {
         window.addEventListener('scroll', function() {
             document.getElementById('header').style.cssText= window.scrollY>39? "height: 50px": "height: 73px";
             document.getElementById('side-body-subcontainer').style.cssText= window.scrollY>39? "top: 45px": "top: 65px";
         }, false); 
+
+        fetchNovelImage(token);
+
     }, [navigate]);
 
     return (
