@@ -1,14 +1,30 @@
 import React from 'react';
-import styled from 'styled-components';
-import NovelImage from '../components/NovelImage';
+import styled from "styled-components";
+import NovelImage from "../components/NovelImage";
+import {useSelector} from "react-redux";
 
 
 const RecommendedNovels= ()=> {
-    //nove image
-    const novelNumbers= [1, 2, 3, 4, 5, 6];
+    //generating number of novels at a certain genre from posts
+    const posts= useSelector((state)=> state.posts);
+    const postsNumber= (genre)=> {
+        if(posts!==undefined) {
+            if(genre<=posts.posts.length) {
+                return posts.posts[genre-1].length;
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    }
+
+    //novel list generator
     const novelList= (number, genre)=> {
         return <NovelImage SId= {number} genre= {genre} id= {"number" + {number}+ "-genre" + {genre}}/>
     };
+
+    //right button
     var RNLVParam= 395;
     const RNLVRightArrowButtonFunction= ()=> {
         if (RNLVParam<= 395- 622*6) {
@@ -19,9 +35,51 @@ const RecommendedNovels= ()=> {
         document.getElementById('rnlv').style.cssText= `left: ${RNLVParam}px`;
     }
 
-    //data array
-    const postArray= [];
+    //novel stack generator
+    const novelStack= ()=> {
+        if(posts!==undefined) {
+            return (
+                <NovelStack>
+                    <SmallText>Romantis</SmallText>
+                    <NovelListView>
+                        {Array.from(Array(postsNumber(1)).keys()).map((number)=>novelList(number, 1))}
+                        <ImageDiv>Lebih Banyak</ImageDiv>
+                    </NovelListView>
+                    <SmallText>Keluarga</SmallText>
+                    <NovelListView>
+                        {Array.from(Array(postsNumber(2)).keys()).map((number)=>novelList(number, 2))}
+                        <ImageDiv>Lebih Banyak</ImageDiv>
+                    </NovelListView>
+                    <SmallText>Misteri</SmallText>
+                    <NovelListView>
+                        {Array.from(Array(postsNumber(3)).keys()).map((number)=>novelList(number, 3))}
+                        <ImageDiv>Lebih Banyak</ImageDiv>
+                    </NovelListView>
+                    <SmallText>Religius</SmallText>
+                    <NovelListView>
+                        {Array.from(Array(postsNumber(4)).keys()).map((number)=>novelList(number, 4))}
+                        <ImageDiv>Lebih Banyak</ImageDiv>
+                    </NovelListView>
+                    <SmallText>Fiksi Ilmiah</SmallText>
+                    <NovelListView>
+                        {Array.from(Array(postsNumber(5)).keys()).map((number)=>novelList(number, 5))}
+                        <ImageDiv>Lebih Banyak</ImageDiv>
+                    </NovelListView>
+                    <SmallText>Traveling</SmallText>
+                    <NovelListView>
+                        {Array.from(Array(postsNumber(6)).keys()).map((number)=>novelList(number, 6))}
+                        <ImageDiv>Lebih Banyak</ImageDiv>
+                    </NovelListView>
+                </NovelStack>
+            );
+        } else {
+            return (
+                <LoadingNovelStack>Loading...</LoadingNovelStack>
+            );
+        }
+    }
 
+    //rendering
     return (
         <MainBodySubContainer>
             <TitleText>Rekomendasi hari ini</TitleText>
@@ -37,32 +95,7 @@ const RecommendedNovels= ()=> {
             <LeftBlock></LeftBlock>
             <RightBlock></RightBlock>
             <RNLVRightArrowButton id= 'rnlv-button' onClick= {RNLVRightArrowButtonFunction}></RNLVRightArrowButton>
-            <NovelStack>
-                <SmallText>Romantis</SmallText>
-                <NovelListView>
-                    {novelNumbers.map((number)=>novelList(number, 1))}
-                </NovelListView>
-                <SmallText>Keluarga</SmallText>
-                <NovelListView>
-                    {novelNumbers.map((number)=>novelList(number, 2))}
-                </NovelListView>
-                <SmallText>Misteri</SmallText>
-                <NovelListView>
-                    {novelNumbers.map((number)=>novelList(number, 3))}
-                </NovelListView>
-                <SmallText>Religius</SmallText>
-                <NovelListView>
-                    {novelNumbers.map((number)=>novelList(number, 4))}
-                </NovelListView>
-                <SmallText>Fiksi Ilmiah</SmallText>
-                <NovelListView>
-                    {novelNumbers.map((number)=>novelList(number, 5))}
-                </NovelListView>
-                <SmallText>Traveling</SmallText>
-                <NovelListView>
-                    {novelNumbers.map((number)=>novelList(number, 6))}
-                </NovelListView>
-            </NovelStack>
+            {novelStack()}
         </MainBodySubContainer>
     );
   
@@ -122,7 +155,7 @@ const LeftBlock= styled.div`
 const RightBlock= styled.div`
     position: absolute;
     top: 143px;
-    height: 2000px;
+    height: 250px;
     right: 0px;
     width: 200px;
     z-index: 3;
@@ -139,6 +172,22 @@ const NovelStack= styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    overflow-x: hidden;
+    overflow-y: hidden;
+`;
+const LoadingNovelStack= styled.div`
+    position: absolute;
+    left: 395px;
+    top: 427px;
+    height: 1700px;
+    width: 10000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    fonst-size: 25px;
+    background-color: white;
+    color: #dddddd;
     overflow-x: hidden;
     overflow-y: hidden;
 `;
@@ -187,6 +236,21 @@ const RNLVRightArrowButton= styled.button`
     background-repeat: no-repeat;
     background-position: center center;
     cursor: pointer;
+`;
+const ImageDiv= styled.div`
+    height: 200px;
+    width: 150px;
+    margin-right: 25px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #400080;
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 export default RecommendedNovels

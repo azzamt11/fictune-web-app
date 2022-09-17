@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {Outlet, Link, useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from "react-redux";
 import {logout} from "../actions/AuthActions";
@@ -12,7 +12,6 @@ const Home= ()=> {
     //user data
     const user= useSelector((state)=> state.authData); 
     const token= user.token;
-    const posts= useSelector((state)=> state.posts);
 
     //navigation and dispatch
     const navigate= useNavigate();
