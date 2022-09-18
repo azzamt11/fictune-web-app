@@ -3,7 +3,7 @@ import {Outlet, Link, useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from "react-redux";
 import {logout} from "../actions/AuthActions";
 import styled from 'styled-components';
-import {getPosts} from "../actions/PostActions";
+import {getPosts, getLikedPosts} from "../actions/PostActions";
 
 const Home= ()=> {
     //dummy
@@ -22,20 +22,36 @@ const Home= ()=> {
         //something to do on searching.
     }
 
-    //logout function
+    //button functions
     const logoutClickFunction= ()=> {
         dispatch(logout(user, navigate));
     }
-
-    //alert function
     const alertClickFunction= ()=> {
         document.getElementById('glass').style.cssText= 'display: none';
+    }
+    const profileClickFunction= ()=> {
+        //to do something.
     }
 
     //post data array
     const fetchNovelImage= async(token)=> {
         console.log("fetching post in progress");
         await dispatch(getPosts({token: token}));
+        console.log("fetching liked post in progress");
+        await dispatch(getLikedPosts({token: token}));
+    }
+
+    //user image generator
+    const userPhotoString= user.user.user_attribute_1;
+    const userImageGenerator= (userPhotoString)=> {
+        return (
+            userPhotoString? 
+            <UserImage onClick= {profileClickFunction} src= {"data:image/png;base64, "+ userPhotoString}/>: 
+            <NoUserImage onClick= {profileClickFunction} id= "no-user-image">
+                <span className= "material-symbols-rounded">person</span>
+                <UserSpan>No Image</UserSpan>
+            </NoUserImage>
+        );
     }
 
     //useEffect
@@ -81,7 +97,7 @@ const Home= ()=> {
                         <TopMenuText>Daftar Premium</TopMenuText>
                     </SideBodyHeader>
                     <UserProfileContainer>
-                        <UserImage></UserImage>
+                        {userImageGenerator(userPhotoString)}
                         <UserData>
                             <UserName>{user? user.user.name : "no-user"}</UserName>
                             <CoinImage src= 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlZ1wn6hO_Ea4CIGhSrQeBeueUmgFr4Zs3qg&usqp=CAU'/>
@@ -112,7 +128,7 @@ const Container= styled.div`
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
-    height: 2300px;
+    height: 1850px;
     overflow-x: hidden;
     overflow-y: hidden;
 `;
@@ -219,7 +235,7 @@ const SideBodySubContainer= styled.div`
     transition: all 0.5s ease 0s;
 `;
 const MainBodyContainer= styled.div`
-    height: 2500px;
+    height: 100%;
     width: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -271,14 +287,39 @@ const UserProfileContainer= styled.div`
     align-items: center;
     justify-content: center;
 `;
-const UserImage= styled.button`
+const UserImage= styled.img`
     height: 90px;
     width: 90px;
     border-radius: 45px;
     border-color: #cccccc;
     border-width: 2px;
-    background-color: #400080;
     matgin-bottom: 15px;
+    transition: all 0.5s ease 0s;
+    cursor: pointer;
+    &:hover {
+        border-color: #400080;
+    }
+`;
+const NoUserImage= styled.div`
+    height: 90px;
+    width: 90px;
+    border-radius: 45px;
+    border-color: #cccccc;
+    border-width: 2px;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #dddddd;
+    matgin-bottom: 15px;
+    cursor: pointer;
+    transition: all 0.5s ease 0s;
+    &:hover {
+        border-color: #400080;
+    }
+`;
+const UserSpan= styled.span`
+    font-size: 14px;
 `;
 const UserData= styled.div`
     height: 40px;

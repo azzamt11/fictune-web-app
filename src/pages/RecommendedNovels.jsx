@@ -1,16 +1,19 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from "styled-components";
 import NovelImage from "../components/NovelImage";
 import {useSelector} from "react-redux";
 
 
 const RecommendedNovels= ()=> {
+    //initial states
+    const [numberOfNovelsOnRender, setNumberOfNovelsOnRender]= useState((Math.floor((window.innerWidth- 395)/135)));
+
     //generating number of novels at a certain genre from posts
     const posts= useSelector((state)=> state.posts);
     const postsNumber= (genre)=> {
         if(posts!==undefined) {
             if(genre<=posts.posts.length) {
-                return posts.posts[genre-1].length;
+                return Math.min(numberOfNovelsOnRender, posts.posts[genre-1].length);
             } else {
                 return 0;
             }
@@ -34,6 +37,13 @@ const RecommendedNovels= ()=> {
         }
         document.getElementById('rnlv').style.cssText= `left: ${RNLVParam}px`;
     }
+
+    //useEffect
+    useEffect(()=> {
+        window.addEventListener('resize', function() {
+            setNumberOfNovelsOnRender((Math.floor((window.innerWidth- 395)/135)));
+        }, false);
+    }, []);
 
     //novel stack generator
     const novelStack= ()=> {
@@ -98,13 +108,11 @@ const RecommendedNovels= ()=> {
             {novelStack()}
         </MainBodySubContainer>
     );
-  
-    
 }
 
 const MainBodySubContainer= styled.div`
     margin-right: 25px;
-    height: 2500px;
+    height: 100%;
     width: 780px;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -125,15 +133,15 @@ const TitleText= styled.span`
     font-weight: bold;
     display: flex;
     height: 30px;
-    margin-bottom: 35px;
+    margin-bottom: 10px;
     width: 400px;
     overflow-y: hidden;
 `;
 const RecomendedNovelListView= styled.div`
     position: absolute;
-    top: 145px;
+    top: 135px;
     left: 395px;
-    height: 245px;
+    height: 220px;
     width: 10000px;
     display: flex;
     flex-direction: row;
@@ -144,9 +152,9 @@ const RecomendedNovelListView= styled.div`
 `;
 const LeftBlock= styled.div`
     position: absolute;
-    top: 143px;
+    top: 123px;
     left: 350px;
-    height: 2000px;
+    height: 1400px;
     width: 50px;
     z-index: 3;
     overflow-x: hidden;
@@ -154,8 +162,8 @@ const LeftBlock= styled.div`
 `;
 const RightBlock= styled.div`
     position: absolute;
-    top: 143px;
-    height: 250px;
+    top: 123px;
+    height: 220px;
     right: 0px;
     width: 200px;
     z-index: 3;
@@ -165,8 +173,8 @@ const RightBlock= styled.div`
 const NovelStack= styled.div`
     position: absolute;
     left: 395px;
-    top: 427px;
-    height: 1700px;
+    top: 370px;
+    height: 1450px;
     width: 10000px;
     display: flex;
     flex-direction: column;
@@ -192,7 +200,7 @@ const LoadingNovelStack= styled.div`
     overflow-y: hidden;
 `;
 const NovelImageView= styled.div`
-    height: 240px;
+    height: 200px;
     width: 600px;
     background-color: white;
     margin-right: 20px;
@@ -210,26 +218,26 @@ const SmallText= styled.span`
     font-weight: bold;
     display: flex;
     height: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     width: 100%;
 `;
 const NovelListView= styled.div`
-    height: 200px;
+    height: 170px;
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 `;
 const RNLVRightArrowButton= styled.button`
     position: absolute;
     z-index: 4;
-    top: 232px;
+    top: 212px;
     right: 50px;
-    height: 70px;
-    width: 70px;
+    height: 50px;
+    width: 50px;
     background-color: white;
-    border-radius: 35px;
+    border-radius: 25px;
     border-width: 1px;
     border-color: #400080;
     background-size: 100%;
@@ -238,8 +246,9 @@ const RNLVRightArrowButton= styled.button`
     cursor: pointer;
 `;
 const ImageDiv= styled.div`
-    height: 200px;
-    width: 150px;
+    height: 100%;
+    width: 50px;
+    font-size: 14px;
     margin-right: 25px;
     background-color: white;
     display: flex;

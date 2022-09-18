@@ -17,6 +17,15 @@ code {
     monospace;
 }
 
+.material-symbols-rounded {
+  font-size: 40px;
+  font-variation-settings:
+  'FILL' 300,
+  'wght' 400,
+  'GRAD' 300,
+  'opsz' 300
+}
+
 #logout-subheader {
   display: flex;
   flex-direction: row;
@@ -49,7 +58,7 @@ code {
 }
 
 #rnlv-button {
-  background-image: url("../public/RightArrowIcon.png");
+  background-image: url("RightArrowIcon.png");
 }
 
 .container {

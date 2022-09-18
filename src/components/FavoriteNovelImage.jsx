@@ -2,16 +2,15 @@ import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import {useSelector} from "react-redux";
 
-const NovelImage= ({genre, SId})=> {
+const FavoriteNovelImage= ({SId})=> {
     //novel click function
     const novelClickFunction= ()=> {
-        console.log(posts.posts);
-        console.log("Math.floor((window.innerWidth- 395)/135)= "+ (Math.floor((window.innerWidth- 395)/135)).toString())
+        console.log("Math.floor((window.innerWidth- 395)/175)= "+ (Math.floor((window.innerWidth- 395)/175)).toString())
     }
 
     //novel image
-    const posts= useSelector((state)=> state.posts);
-    const imageString= genre<= posts.posts.length?(posts.posts[genre-1][SId]? posts.posts[genre-1][SId].post_attribute_3 : "no-image"): "no-image";
+    const favoritePosts= useSelector((state)=> state.posts);
+    const imageString= favoritePosts.posts[SId]? favoritePosts.posts[SId].post_attribute_3 : "no-image";
 
     //useEffect
     useEffect(()=> {
@@ -23,7 +22,7 @@ const NovelImage= ({genre, SId})=> {
     );
 }
 
-export default NovelImage
+export default FavoriteNovelImage
 
 //...................styling.............//
 const Image= styled.img`
